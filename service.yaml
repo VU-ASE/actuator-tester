@@ -1,0 +1,20 @@
+name: controller
+author: leonid
+source: github.com/VU-ASE/motor-tester
+version: 1.0.0
+description: Service to calibrate the motors
+
+commands:
+  build: make build
+  run: ./bin/motor-tester
+
+inputs: []
+
+outputs:
+  - decision
+
+configuration:
+  - name: udp-port
+    tunable: false
+    type: string
+    value: ":8080"
