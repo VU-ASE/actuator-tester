@@ -1,4 +1,2 @@
-# service-template-go
-
-This is best used in combination with roverctl.
-wip, docs soon.
+# actuator-tester
+Service to test the actuator with
