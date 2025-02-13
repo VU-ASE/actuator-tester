@@ -14,6 +14,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// required json format:
+// channel :  0 for steering servo, 1 for left motor, 2 for right motor
+// value : from -1 to 1
 type ChannelCommand struct {
     Channel int     `json:"channel"`
     Value   float64 `json:"value"`
@@ -66,6 +69,16 @@ func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration)
 		}
 		log.Info().Msgf("Unmarshalled json info: channel: %d, value: %f", command.Channel, command.Value)
 
+		if command.Value > 1 {
+			command.Value = 1
+			log.Warn().Msgf("Read value greater than 1. Setting to 1")
+		}
+
+		if command.Value < -1 {
+			command.Value = -1
+			log.Warn().Msgf("Read value less than -1. Setting to -1")
+		}
+
 		// format the command as an output stream readable by other services
 		var result pb_outputs.ControllerOutput
 		result.FrontLights = false
@@ -77,6 +90,9 @@ func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration)
 		case 2:
 			result.RightThrottle = float32(command.Value)
 		default:
+			result.SteeringAngle = float32(0)
+			result.LeftThrottle = float32(0)
+			result.RightThrottle = float32(0)
 			log.Error().Msgf("Unrecognized value in the [channel] field. Expected: [0-2], got: %d", channel)
 		}
 
