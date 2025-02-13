@@ -1,8 +1,8 @@
 name: controller
-author: leonid
+author: vu-ase
 source: github.com/VU-ASE/motor-tester
 version: 1.0.0
-description: Service to calibrate the motors
+description: Service to assist users with calibration and testing of motors over a UDP connection
 
 commands:
   build: make build

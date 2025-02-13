@@ -14,13 +14,12 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type UDPObject struct {
+type ChannelCommand struct {
     Channel int     `json:"channel"`
     Value   float64 `json:"value"`
 }
 
 // The main user space program
-// this program has all you need from roverlib: service identity, reading, writing and configuration
 func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration) error {
 	if configuration == nil {
 		return fmt.Errorf("configuration cannot be accessed")
@@ -39,41 +38,37 @@ func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration)
 		return fmt.Errorf("failed to get write stream")
 	}
 
-
-	pc, err := net.ListenPacket("udp", port)
+	// open a connection over a UDP port specified in service.yaml
+	connection, err := net.ListenPacket("udp", port)
 	if err != nil {
 		return fmt.Errorf("failed to access port %s", port)
 	}
-	defer pc.Close()
+	defer connection.Close()
 
 	log.Info().Msgf("Listening on port: %s", port)
 
 	for {
-		
+		// read incoming data from the connection
 		buf := make([]byte, 1024)
-
-		n, _, err := pc.ReadFrom(buf)
+		nBytesRead, _, err := connection.ReadFrom(buf)
 		if err != nil {
 			log.Error().Msgf("Error encountered while receiving a packet")
 			continue
 		}
-
 		log.Info().Msgf("Received a message")
 
-		var command UDPObject
-		// json.Unmarshal(buf[:n], &command)
-		err = json.Unmarshal(buf[:n], &command)
+		// decode the raw data into a useable format
+		var command ChannelCommand
+		err = json.Unmarshal(buf[:nBytesRead], &command)
 		if err != nil {
 			log.Error().Msgf("Failed to unmarshal JSON: %v", err)
 			continue
 		}
+		log.Info().Msgf("Unmarshalled json info: channel: %d, value: %f", command.Channel, command.Value)
 
-		log.Info().Msgf("Unmarshalled jason info: channel: %d, value: %f", command.Channel, command.Value)
-
-
+		// format the command as an output stream readable by other services
 		var result pb_outputs.ControllerOutput
 		result.FrontLights = false
-
 		switch channel := command.Channel; channel {
 		case 0:
 			result.SteeringAngle = float32(command.Value)
@@ -85,7 +80,7 @@ func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration)
 			log.Error().Msgf("Unrecognized value in the [channel] field. Expected: [0-2], got: %d", channel)
 		}
 
-
+		// Send it for the actuator (and others) to use
 		err = writeStream.Write(
 			&pb_outputs.SensorOutput{
 				SensorId:  2,
@@ -95,9 +90,8 @@ func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration)
 				},
 			},
 		)
-		// Send it for the actuator (and others) to use
 		if err != nil {
-			log.Err(err).Msg("Failed to send controller output")
+			log.Err(err).Msg("Failed to send tester output")
 			continue
 		}
 
@@ -108,18 +102,10 @@ func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration)
 // This function gets called when roverd wants to terminate the service
 func onTerminate(sig os.Signal) error {
 	log.Info().Str("signal", sig.String()).Msg("Terminating service")
-
-	//
-	// ...
-	// Any clean up logic here
-	// ...
-	//
-
 	return nil
 }
 
 // This is just a wrapper to run the user program
-// it is not recommended to put any other logic here
 func main() {
 	roverlib.Run(run, onTerminate)
 }
