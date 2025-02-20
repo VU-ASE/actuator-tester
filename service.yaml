@@ -1,0 +1,20 @@
+name: controller
+author: vu-ase
+source: github.com/VU-ASE/actuator-tester
+version: 1.0.0
+description: Service to assist users with calibration and testing of motors over a UDP connection
+
+commands:
+  build: make build
+  run: ./bin/actuator-tester
+
+inputs: []
+
+outputs:
+  - decision
+
+configuration:
+  - name: udp-port
+    tunable: false
+    type: string
+    value: ":8080"
