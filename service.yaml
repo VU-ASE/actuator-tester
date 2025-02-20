@@ -1,12 +1,12 @@
 name: controller
 author: vu-ase
-source: github.com/VU-ASE/motor-tester
+source: github.com/VU-ASE/actuator-tester
 version: 1.0.0
 description: Service to assist users with calibration and testing of motors over a UDP connection
 
 commands:
   build: make build
-  run: ./bin/motor-tester
+  run: ./bin/actuator-tester
 
 inputs: []
 

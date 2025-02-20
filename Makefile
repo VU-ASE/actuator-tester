@@ -2,7 +2,7 @@
 .PHONY: build start clean test
 
 BUILD_DIR=bin/
-BINARY_NAME=motor-tester
+BINARY_NAME=actuator-tester
 
 lint:
 	@echo "Lint check..."
