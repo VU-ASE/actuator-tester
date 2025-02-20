@@ -4,7 +4,7 @@
 <div align="center">
   <a href="https://github.com/VU-ASE/actuator-tester/releases/latest">Latest release</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://ase.vu.nl/docs/">Documentation</a>
+  <a href="https://ase.vu.nl/docs/category/actuator-tester">Documentation</a>
   <br />
 </div>
 <br/>
