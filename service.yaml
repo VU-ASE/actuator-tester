@@ -1,8 +1,9 @@
-name: controller
+name: actuator-tester
 author: vu-ase
 source: github.com/VU-ASE/actuator-tester
 version: 1.0.0
 description: Service to assist users with calibration and testing of motors over a UDP connection
+as: controller
 
 commands:
   build: make build
