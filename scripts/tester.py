@@ -1,7 +1,11 @@
 import socket
 import time
 
-UDP_IP = "192.168.0.101"
+rover_id = int(input("Please input the id of your rover: "))
+
+ip_component = 100 + rover_id
+
+UDP_IP = f"192.168.0.{ip_component}" # change if necessary
 UDP_PORT = 8080
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP

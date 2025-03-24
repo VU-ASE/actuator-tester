@@ -20,3 +20,6 @@ The UDP payload should be a parsable JSON object in the following format:
 | 1       | Controls the **left** motor and expects a value between -1.0 (full reverse) and 1.0 (full forwards)|
 | 2       | Controls the **right** motor and expects a value between -1.0 (full reverse) and 1.0 (full forwards)|
 
+## Testing
+
+To check if the motors work, you can run `make test` from the container - it will run `tester.py` in the `scripts` directory. Upon execution, you will be prompted to input the id of the rover you are trying to test. 
