@@ -35,6 +35,12 @@ func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration)
 	}
 	log.Info().Msgf("Fetched runtime configuration UDP port number: %s", port)
 
+	ignoreWebUI, err := configuration.GetFloat("udp-tuning")
+	if err != nil {
+		return fmt.Errorf("failed to get configuration: %v", err)
+	}
+	log.Info().Msgf("Fetched runtime configuration ignoreWebUI: %f", ignoreWebUI)
+
 
 	writeStream := service.GetWriteStream("decision")
 	if writeStream == nil {
@@ -51,24 +57,57 @@ func run(service roverlib.Service, configuration *roverlib.ServiceConfiguration)
 	log.Info().Msgf("Listening on port: %s", port)
 
 	for {
-		// read incoming data from the connection
-		buf := make([]byte, 1024)
-		nBytesRead, _, err := connection.ReadFrom(buf)
-		if err != nil {
-			log.Error().Msgf("Error encountered while receiving a packet")
-			continue
-		}
-		log.Info().Msgf("Received a message")
 
-		// decode the raw data into a useable format
+		time.Sleep(1 * time.Second)
+		ignoreWebUINew, err := configuration.GetFloat("udp-tuning")
+		if err != nil {
+			return fmt.Errorf("failed to get configuration: %v", err)
+		}
+		log.Info().Msgf("Fetched runtime configuration ignoreWebUI: %f", ignoreWebUINew)
+
+		if ignoreWebUINew != ignoreWebUI {
+			log.Info().Float64("ignoreWebUINew", ignoreWebUINew).Msg("fetched new value")
+		}
+
 		var command ChannelCommand
-		err = json.Unmarshal(buf[:nBytesRead], &command)
-		if err != nil {
-			log.Error().Msgf("Failed to unmarshal JSON: %v", err)
-			continue
-		}
-		log.Info().Msgf("Unmarshalled json info: channel: %d, value: %f", command.Channel, command.Value)
 
+		if ignoreWebUI == 1 {
+			// read incoming data from the connection
+			buf := make([]byte, 1024)
+			nBytesRead, _, err := connection.ReadFrom(buf)
+			if err != nil {
+				log.Error().Msgf("Error encountered while receiving a packet")
+				continue
+			}
+			log.Info().Msgf("Received a message")
+
+			// decode the raw data into a useable format
+			// var command ChannelCommand
+			err = json.Unmarshal(buf[:nBytesRead], &command)
+			if err != nil {
+				log.Error().Msgf("Failed to unmarshal JSON: %v", err)
+				continue
+			}
+			log.Info().Msgf("Unmarshalled json info: channel: %d, value: %f", command.Channel, command.Value)
+		} else {
+			channel, err := configuration.GetFloat("channel")
+			if err != nil {
+				return fmt.Errorf("failed to get configuration: %v", err)
+			}
+			log.Info().Msgf("Fetched runtime configuration channel: %f", channel)
+
+			value, err := configuration.GetFloat("value")
+			if err != nil {
+				return fmt.Errorf("failed to get configuration: %v", err)
+			}
+			log.Info().Msgf("Fetched runtime configuration value: %f", value)
+
+			command = ChannelCommand{
+				Channel: 	int(channel),
+				Value: 		value,
+			}
+		}
+		
 		if command.Value > 1 {
 			command.Value = 1
 			log.Warn().Msgf("Read value greater than 1. Setting to 1")
