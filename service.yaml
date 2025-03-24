@@ -16,23 +16,7 @@ outputs:
 
 configuration:
   - name: udp-port
-    tunable: true
+    tunable: false
     type: string
     value: ":8080"
-
-  - name: udp-tuning # if set to 1 then will ignore webui changes and wait for udp messages
-    tunable: true
-    type: number
-    value: 1
-
-  - name: channel
-    tunable: true
-    type: number
-    value: 0
-
-  - name: value
-    tunable: true
-    type: number
-    value: 0
-
 

@@ -1,6 +1,6 @@
 # Overview
 
-This is a stand-alone service which does not take any inputs nor produce any outputs. It lets you test the motors and servo over the network through a specified UDP Port.
+This is a service that can test the default [actuator](https://github.com/VU-ASE/actuator) through the the web interface or by accepting JSON objects over a UDP connection. It lets you test the motors and servo.
 
 # Usage
 
