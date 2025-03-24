@@ -1,6 +1,6 @@
 # Overview
 
-This is a stand-alone service which does not take any inputs nor produce any outputs. It lets you test the motors and servo over the network through a specified UDP Port.
+This is a service that can test the default [actuator](https://github.com/VU-ASE/actuator) through the the web interface or by accepting JSON objects over a UDP connection. It lets you test the motors and servo.
 
 # Usage
 
@@ -20,3 +20,6 @@ The UDP payload should be a parsable JSON object in the following format:
 | 1       | Controls the **left** motor and expects a value between -1.0 (full reverse) and 1.0 (full forwards)|
 | 2       | Controls the **right** motor and expects a value between -1.0 (full reverse) and 1.0 (full forwards)|
 
+## Testing
+
+To check if the motors work, you can run `make test` from the container - it will run `tester.py` in the `scripts` directory. Upon execution, you will be prompted to input the id of the rover you are trying to test. 

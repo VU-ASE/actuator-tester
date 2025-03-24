@@ -26,5 +26,7 @@ clean:
 	@echo "Cleaning all targets for ${BINARY_NAME}"
 	rm -rf $(BUILD_DIR)
 
-test: lint
-	go test ./src -v -count=1 -timeout 0
+test: 
+	python3 scripts/tester.py
+
+

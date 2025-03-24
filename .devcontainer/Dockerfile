@@ -13,6 +13,7 @@ RUN apt-get update && \
     make \
     build-essential \
     pkg-config \
+    python3 \
     libzmq3-dev \
     && rm -rf /var/lib/apt/lists/*
 
