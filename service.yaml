@@ -23,7 +23,7 @@ configuration:
   - name: udp-tuning # if set to 1 then will ignore webui changes and wait for udp messages
     tunable: true
     type: number
-    value: 0
+    value: 1
 
   - name: channel
     tunable: true
