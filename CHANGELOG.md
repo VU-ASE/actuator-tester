@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/VU-ASE/actuator-tester/compare/v1.0.0...v1.0.1) (2025-03-29)
+
+
+### Bug Fixes
+
+* updated roverlib-go and rovercom ([04a87a5](https://github.com/VU-ASE/actuator-tester/commit/04a87a5d80982bcebc76898d322b3bd1a06f6ae4))
+
 ## 1.0.0 (2025-03-24)
 
 
