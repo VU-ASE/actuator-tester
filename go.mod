@@ -5,8 +5,8 @@ go 1.21.6
 toolchain go1.22.10
 
 require (
-	github.com/VU-ASE/rovercom v1.5.1
-	github.com/VU-ASE/roverlib-go v1.2.6
+	github.com/VU-ASE/rovercom v1.7.0
+	github.com/VU-ASE/roverlib-go v1.2.7
 	github.com/rs/zerolog v1.33.0
 )
 
