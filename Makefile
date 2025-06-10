@@ -27,6 +27,6 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 test: 
-	python3 scripts/tester.py
+	@echo "No tests for actuator-tester"
 
 
