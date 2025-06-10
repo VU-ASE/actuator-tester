@@ -6,7 +6,8 @@ BINARY_NAME=actuator-tester
 
 lint:
 	@echo "Lint check..."
-	@golangci-lint run
+	@GOFLAGS="-buildvcs=false" golangci-lint run
+	@echo "Lint complete"
 
 build: #lint
 	@echo "building ${BINARY_NAME}"
@@ -26,7 +27,7 @@ clean:
 	@echo "Cleaning all targets for ${BINARY_NAME}"
 	rm -rf $(BUILD_DIR)
 
-test: 
+test: lint
 	@echo "No tests for actuator-tester"
 
 
